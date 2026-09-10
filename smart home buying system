@@ -1,0 +1,162 @@
+import gradio as gr
+
+def smart_home_buying(city, budget, house_price, salary, loan,
+                      distance, school, hospital, crime,
+                      water, power, internet, parking,
+                      house_age, documents):
+
+    result = "🏡 SMART HOME BUYING REPORT\n"
+
+
+    # 1. Budget Check
+    if house_price <= budget:
+        result += "✔ Budget : Affordable\n"
+    else:
+        result += "✘ Budget : Not Affordable\n"
+
+    # 2. Salary Check
+    if salary >= 100000:
+        result += "✔ Salary : Excellent\n"
+    elif salary >= 60000:
+        result += "✔ Salary : Good\n"
+    else:
+        result += "✘ Salary : Low\n"
+
+    # 3. Loan Check
+    if loan == "Yes":
+        result += "✔ Loan : Eligible\n"
+    else:
+        result += "✘ Loan : Not Eligible\n"
+
+    # 4. Distance Check
+    if distance <= 10:
+        result += "✔ Distance : Excellent\n"
+    elif distance <= 20:
+        result += "✔ Distance : Good\n"
+    else:
+        result += "✘ Distance : Too Far\n"
+
+    # 5. School Check
+    if school == "Yes":
+        result += "✔ School : Nearby\n"
+    else:
+        result += "✘ School : Not Nearby\n"
+
+    # 6. Hospital Check
+    if hospital == "Yes":
+        result += "✔ Hospital : Nearby\n"
+    else:
+        result += "✘ Hospital : Not Nearby\n"
+
+    # 7. Crime Check
+    if crime == "Low":
+        result += "✔ Crime Rate : Safe Area\n"
+    elif crime == "Medium":
+        result += "⚠ Crime Rate : Moderate\n"
+    else:
+        result += "✘ Crime Rate : Unsafe\n"
+
+    # 8. Water Check
+    if water == "24 Hours":
+        result += "✔ Water Supply : Excellent\n"
+    elif water == "Limited":
+        result += "⚠ Water Supply : Limited\n"
+    else:
+        result += "✘ Water Supply : Poor\n"
+
+    # 9. Power Check
+    if power == "Good":
+        result += "✔ Power Supply : Good\n"
+    else:
+        result += "✘ Frequent Power Cuts\n"
+
+    # 10. Internet Check
+    if internet == "Fiber":
+        result += "✔ Internet : High Speed Fiber\n"
+    elif internet == "Broadband":
+        result += "✔ Internet : Broadband\n"
+    else:
+        result += "✘ Internet : Not Available\n"
+
+    # 11. Parking Check
+    if parking == "Yes":
+        result += "✔ Parking : Available\n"
+    else:
+        result += "✘ Parking : Not Available\n"
+
+    # 12. House Age Check
+    if house_age <= 5:
+        result += "✔ House Age : New House\n"
+    elif house_age <= 15:
+        result += "✔ House Age : Good Condition\n"
+    else:
+        result += "✘ House Age : Old House\n"
+
+    # 13. Documents Check
+    if documents == "Yes":
+        result += "✔ Documents : Verified\n"
+    else:
+        result += "✘ Documents : Not Verified\n"
+
+    result += "\n"
+    result += "="*35 + "\n"
+    result += "FINAL DECISION\n"
+    result += "="*35 + "\n"
+
+    # 14. Final Decision
+    if (
+        house_price <= budget and
+        salary >= 60000 and
+        loan == "Yes" and
+        distance <= 20 and
+        school == "Yes" and
+        hospital == "Yes" and
+        crime != "High" and
+        water != "Poor" and
+        power == "Good" and
+        internet != "None" and
+        parking == "Yes" and
+        house_age <= 15 and
+        documents == "Yes"
+    ):
+        result += "\n🏡 CONGRATULATIONS!\n"
+        result += "✅ BUY THIS HOUSE"
+    else:
+        result += "\n⚠ Recommendation\n"
+        result += "❌ DON'T BUY THIS HOUSE"
+
+    return result
+
+
+demo = gr.Interface(
+    fn=smart_home_buying,
+    title="🏡 Smart Home Buying System",
+    description="Check whether a house is worth buying based on multiple conditions.",
+    inputs=[
+        gr.Dropdown(
+            ["Hyderabad", "Bangalore", "Chennai", "Mumbai", "Delhi"],
+            label="City"
+        ),
+        gr.Number(label="Your Budget (₹)"),
+        gr.Number(label="House Price (₹)"),
+        gr.Number(label="Monthly Salary (₹)"),
+        gr.Radio(["Yes", "No"], label="Loan Eligible"),
+        gr.Slider(0, 50, value=10, step=1, label="Distance to Office (km)"),
+        gr.Radio(["Yes", "No"], label="Nearby School"),
+        gr.Radio(["Yes", "No"], label="Nearby Hospital"),
+        gr.Radio(["Low", "Medium", "High"], label="Crime Rate"),
+        gr.Radio(["24 Hours", "Limited", "Poor"], label="Water Supply"),
+        gr.Radio(["Good", "Poor"], label="Power Supply"),
+        gr.Radio(["Fiber", "Broadband", "None"], label="Internet"),
+        gr.Radio(["Yes", "No"], label="Parking Available"),
+        gr.Number(label="House Age (Years)"),
+        gr.Radio(["Yes", "No"], label="Legal Documents Verified"),
+    ],
+    outputs=gr.Textbox(
+        label="Home Buying Report",
+        lines=22
+    ),
+    theme=gr.themes.Soft()
+)
+
+demo.launch()
